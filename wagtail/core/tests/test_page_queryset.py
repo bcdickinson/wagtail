@@ -441,12 +441,6 @@ class TestPageQuerySetSearch(TestCase):
         self.assertIn(Page.objects.get(url_path='/home/events/tentative-unpublished-event/').specific, pages)
         self.assertIn(Page.objects.get(url_path='/home/events/someone-elses-event/').specific, pages)
 
-    def test_search_with_id_filter(self):
-        self.assertGreater(EventPage.objects.count(), 1)  # Needed to ensure asserting one search result is meaningful
-        page = EventPage.objects.first()
-        results = EventPage.objects.filter(id=page.id).search(None)
-        self.assertEqual(results.count(), 1)
-
     def test_operators(self):
         results = EventPage.objects.search("moon ponies", operator='and')
 

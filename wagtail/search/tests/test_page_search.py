@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from wagtail.core.models import Page
 from wagtail.search.backends import get_search_backend
+from wagtail.tests.testapp.models import EventPage
 
 
 class PageSearchTests(object):
@@ -42,6 +43,12 @@ class PageSearchTests(object):
 
     def test_search_specific_queryset_with_fields(self):
         list(Page.objects.specific().search('bread', fields=['title'], backend=self.backend_name))
+
+    def test_search_with_id_filter(self):
+        self.assertGreater(EventPage.objects.count(), 1)  # Needed to ensure asserting one search result is meaningful
+        page = EventPage.objects.first()
+        results = EventPage.objects.filter(id=page.id).search(None)
+        self.assertEqual(results.count(), 1)
 
 
 for backend_name in settings.WAGTAILSEARCH_BACKENDS.keys():
